@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 @TeleOp(name = "OpMode Test", group = "Test")
 class OpModeTest : LinearOpMode() {
     override fun runOpMode() {
-        telemetry.addData("Status", "Initialized")
+        telemetry.addData("Status ", "Initialized")
         telemetry.update()
 
         waitForStart()
