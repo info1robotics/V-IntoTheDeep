@@ -5,9 +5,11 @@ import com.qualcomm.robotcore.hardware.PwmControl.PwmRange
 import com.qualcomm.robotcore.hardware.ServoImplEx
 
 object Pitch {
-    val UPRIGHT_POSITION = 0.114
-    val COLLECT_POSITION = 0.685
-    val PERPENDICULAR_POSITION = 0.4
+    //TODO: tune positions
+
+    val UPRIGHT_POSITION = 0.0
+    val COLLECT_POSITION = 0.0
+    val PERPENDICULAR_POSITION = 0.0
 
     lateinit var servoPitch: ServoImplEx
 

@@ -1,35 +1,21 @@
 package org.firstinspires.ftc.teamcode.subsystems
 
 import com.qualcomm.robotcore.hardware.DcMotor
-import com.qualcomm.robotcore.hardware.DcMotorImpl
 import com.qualcomm.robotcore.hardware.DcMotorImplEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
 import org.firstinspires.ftc.teamcode.common.Log
+import org.firstinspires.ftc.teamcode.common.PidController
 import kotlin.math.abs
-class LiftPIDController(val kP: Double, val kI: Double, val kD: Double) {
-    private var lastError = 0.0
-    private var integral = 0.0
-
-    fun calculate(target: Double, current: Double): Double {
-        val error = target - current
-        integral += error
-        val derivative = error - lastError
-        lastError = error
-
-
-
-        return (kP * error) + (kI * integral) + (kD * derivative)
-    }
-}
 
 object Lift {
     val SPOOL_DIAMETER_MM = 32
     val SPOOL_CIRCUMFERENCE_MM = SPOOL_DIAMETER_MM * Math.PI
 
-    val MOTOR_RPM = 435
-    val GEAR_RATIO = 21.0 / 16.0 * 2.0
-    val MOTOR_PPR = 384.5
+    //TODO: Change these according to your setup
+    val MOTOR_RPM = 1600
+    val GEAR_RATIO = 1.0
+    val MOTOR_PPR = 383.6
 
     val LOWER_LIMIT = 0
     val UPPER_LIMIT = 1200
@@ -44,7 +30,7 @@ object Lift {
     var targetPower = 0.0
     var currentPower = 0.0
 
-    private val pidControllerVertical = LiftPIDController(7.0,0.3,0.7)
+    private val pidControllerVertical = PidController(7.0,0.3,0.7)//TODO tune the params
 
 
     fun init(hardwareMap: HardwareMap) {

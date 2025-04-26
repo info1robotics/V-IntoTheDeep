@@ -4,22 +4,26 @@ import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.Log
-import org.firstinspires.ftc.teamcode.subsystems.Yaw
+import org.firstinspires.ftc.teamcode.subsystems.Claw
 
 @TeleOp
 @Config
-class YawTesting: LinearOpMode() {
+class ClawTesting : LinearOpMode() {
     companion object {
         @JvmField
-        var POSITION_DEG = 0.0
+        var pos = 0.44
     }
-
     override fun runOpMode() {
+        Claw.init(hardwareMap)
         val log = Log(telemetry)
-        Yaw.init(hardwareMap)
         waitForStart()
-        while (opModeIsActive() && !isStopRequested) {
-            Yaw.setPositionDeg(POSITION_DEG)
+        while (!isStopRequested && opModeIsActive()) {
+            Claw.setPosition(pos)
+            log.add("Position", Claw.servoClaw.position)
+            log.add("Position Analog", Claw.getPosition())
+            log.tick()
+
         }
     }
+
 }

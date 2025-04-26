@@ -1,31 +1,34 @@
-package org.firstinspires.ftc.teamcode.opmodes.debug
+package org.firstinspires.ftc.teamcode.opmodes.debug.auxiliar
 
 import com.acmerobotics.dashboard.config.Config
-import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.PwmControl.PwmRange
-import com.qualcomm.robotcore.hardware.ServoImpl
+import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.hardware.ServoImplEx
 
 //@Disabled
 @Config
 @TeleOp
 //@Photon
-class ServoTesting: LinearOpMode() {
+class DualServoTesting: LinearOpMode() {
     companion object {
         @JvmField
-        var servoPosition = -1.0
+        var servoPosition = 1.0
     }
 
     override fun runOpMode() {
         val servo = hardwareMap.get(ServoImplEx::class.java, "servo")
+        val servo2 = hardwareMap.get(ServoImplEx::class.java, "servo2")
+        servo2.direction = Servo.Direction.REVERSE
         servo.pwmRange = PwmRange(500.0, 2500.0)
+        servo2.pwmRange = PwmRange(500.0, 2500.0)
 
         waitForStart()
         while (opModeIsActive() && !isStopRequested) {
             if (servoPosition == -1.0) continue; // skip starting position
             servo.position = servoPosition
+            servo2.position = servoPosition
         }
     }
 }

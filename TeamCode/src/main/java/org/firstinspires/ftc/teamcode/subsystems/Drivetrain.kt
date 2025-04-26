@@ -1,24 +1,70 @@
 package org.firstinspires.ftc.teamcode.subsystems
 
+import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode
+import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
 import org.firstinspires.ftc.teamcode.common.Log
+import org.firstinspires.ftc.teamcode.subsystems.Lift.currentPower
+import org.firstinspires.ftc.teamcode.subsystems.Lift.getCurrentPosition
+import org.firstinspires.ftc.teamcode.subsystems.Lift.liftMotorLeft
+import org.firstinspires.ftc.teamcode.subsystems.Lift.liftMotorRight
+import org.firstinspires.ftc.teamcode.subsystems.Lift.liftMotors
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
 
-class Drivetrain(hardwareMap: HardwareMap) {
-    var fl: DcMotor = hardwareMap.get(DcMotor::class.java, "FL")
-    var fr: DcMotor = hardwareMap.get(DcMotor::class.java, "FR")
-    var bl: DcMotor = hardwareMap.get(DcMotor::class.java, "BL")
-    var br: DcMotor = hardwareMap.get(DcMotor::class.java, "BR")
+@Config
 
-    val motors = arrayOf(fl, fr, bl, br)
+object Drivetrain {
+    private var LATERAL_MULTIPLIER = 1.5
 
-    init {
+    lateinit var fl: DcMotor
+    lateinit var fr: DcMotor
+    lateinit var bl: DcMotor
+    lateinit var br: DcMotor
+    lateinit var motors: Array<DcMotor>
+
+    const val FINAL_POSITION = -390
+
+
+    fun init(hardwareMap: HardwareMap) {
+        fl = hardwareMap.get(DcMotor::class.java, "motorFL")
+        fr = hardwareMap.get(DcMotor::class.java, "motorFR")
+        bl = hardwareMap.get(DcMotor::class.java, "motorBL")
+        br = hardwareMap.get(DcMotor::class.java, "motorBR")
+
+        motors = arrayOf(fl, fr, bl, br)
+
+        fl.direction = DcMotorSimple.Direction.REVERSE
+        bl.direction = DcMotorSimple.Direction.REVERSE
+        br.direction = DcMotorSimple.Direction.FORWARD
+        fr.direction = DcMotorSimple.Direction.FORWARD
+
+        motors.forEach {  motor ->
+            motor.mode = RunMode.RUN_WITHOUT_ENCODER
+            motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+
+            motor.motorType.clone().apply {
+                achieveableMaxRPMFraction = 1.0
+                motor.motorType = this
+            }
+        }
+    }
+
+    fun initAuto(hardwareMap: HardwareMap) {
+        LATERAL_MULTIPLIER = 1.1
+        fl = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "motorBR")
+        bl = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "motorFR")
+        br = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "motorFL")
+        fr = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "motorBL")
+
+        motors = arrayOf(fl, fr, bl, br)
+
+
         fl.direction = DcMotorSimple.Direction.REVERSE
         bl.direction = DcMotorSimple.Direction.REVERSE
         br.direction = DcMotorSimple.Direction.FORWARD
@@ -46,6 +92,8 @@ class Drivetrain(hardwareMap: HardwareMap) {
 
         val inputAxial = (inAxial * maxOutput)
         val inputLateral = (inLateral * maxOutput) * LATERAL_MULTIPLIER // TODO: tune
+        Log.instance.add("inLateral", inLateral)
+        Log.instance.add("inputLateral", inputLateral)
         val inputYaw = (inYaw * maxOutput)
 
         modMaintainMotorRatio = max(abs(inputAxial) + abs(inputLateral) + abs(inputYaw), 1.0)
@@ -63,6 +111,10 @@ class Drivetrain(hardwareMap: HardwareMap) {
         }
 
         setDriveMotorPower(leftFrontPower, rightFrontPower, leftBackPower, rightBackPower)
+    }
+
+    fun stop() {
+        setDriveMotorPower(0.0, 0.0, 0.0, 0.0)
     }
 
     fun driveMecanumFieldCentric(
@@ -104,8 +156,40 @@ class Drivetrain(hardwareMap: HardwareMap) {
         bl.power = leftBackPower
         br.power = rightBackPower
     }
-
-    companion object {
-        var LATERAL_MULTIPLIER: Double = 1.5
+    fun resetEncoders()
+    {
+        motors.forEach {
+            it.mode = RunMode.STOP_AND_RESET_ENCODER
+            it.targetPosition = 0
+            it.mode = RunMode.RUN_TO_POSITION
+        }
     }
+    fun coupled()
+    {
+        if(fl.mode!=RunMode.RUN_USING_ENCODER)
+        {
+            fl.mode = RunMode.RUN_USING_ENCODER
+            fr.mode = RunMode.RUN_USING_ENCODER
+
+        }
+
+        fl.targetPosition = fl.currentPosition
+        fr.targetPosition = fl.currentPosition
+
+        fl.mode = RunMode.RUN_TO_POSITION
+        fr.mode = RunMode.RUN_TO_POSITION
+
+        fl.power= 1.0
+        fr.power= 1.0
+
+    }
+    fun setPositionFront(target: Int)
+    {
+        fl.targetPosition = target
+        fr.targetPosition = target
+    }
+    fun getCurrentPosition(): Int {
+        return fl.currentPosition
+    }
+
 }

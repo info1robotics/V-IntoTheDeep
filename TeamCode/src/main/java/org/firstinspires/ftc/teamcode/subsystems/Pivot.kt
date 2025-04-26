@@ -6,8 +6,9 @@ import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.hardware.ServoImplEx
 
 object Pivot {
-    val UPRIGHT_POSITION = 0.92
-    val DOWNRIGHT_POSITION = 0.1
+    //TODO: tune positions
+    val UPRIGHT_POSITION = 0.0
+    val DOWNRIGHT_POSITION = 0.0
 
     lateinit var servoPivotLeft: ServoImplEx
     lateinit var servoPivotRight: ServoImplEx

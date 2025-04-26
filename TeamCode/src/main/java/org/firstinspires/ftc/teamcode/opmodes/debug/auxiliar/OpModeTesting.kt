@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.opmodes.debug
+package org.firstinspires.ftc.teamcode.opmodes.debug.auxiliar
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 
 @TeleOp(name = "OpMode Test", group = "Test")
-class OpModeTest : LinearOpMode() {
+class OpModeTesting : LinearOpMode() {
     override fun runOpMode() {
         telemetry.addData("Status ", "Initialized")
         telemetry.update()
