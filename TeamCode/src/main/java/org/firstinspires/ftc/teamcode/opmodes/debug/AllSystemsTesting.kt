@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Clutch
 import org.firstinspires.ftc.teamcode.subsystems.Controller
 import org.firstinspires.ftc.teamcode.subsystems.Fold
 import org.firstinspires.ftc.teamcode.subsystems.Joint
+import org.firstinspires.ftc.teamcode.subsystems.Linkage
 import org.firstinspires.ftc.teamcode.subsystems.Pitch
 import org.firstinspires.ftc.teamcode.subsystems.Pivot
 
@@ -33,6 +34,8 @@ class AllSystemsTesting: LinearOpMode() {
 
         @JvmField
         var clutchPosition = 0.0
+        @JvmField
+        var linkagePosition = Linkage.INIT
     }
 
 
@@ -47,6 +50,7 @@ class AllSystemsTesting: LinearOpMode() {
             Claw.setPosition(clawPosition)
             Fold.setPosition(foldPosition)
             Clutch.setPosition(clutchPosition)
+            Linkage.setPosition(linkagePosition)
         }
     }
 }
