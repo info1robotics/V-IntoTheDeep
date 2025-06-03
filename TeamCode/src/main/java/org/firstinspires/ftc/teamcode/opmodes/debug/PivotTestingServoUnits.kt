@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Pivot
 
 @TeleOp
 @Config
-class PivotTesting: LinearOpMode() {
+class PivotTestingServoUnits: LinearOpMode() {
     companion object {
         @JvmField
         var POSITION = 0.0
@@ -21,6 +21,8 @@ class PivotTesting: LinearOpMode() {
         while (opModeIsActive() && !isStopRequested) {
             Pivot.setPosition(POSITION)
             log.tick()
+            log.add("Servo Units")
+            log.add(Pivot.getPositionDeg().toString())
         }
     }
 }

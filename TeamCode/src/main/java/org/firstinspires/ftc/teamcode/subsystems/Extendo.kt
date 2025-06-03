@@ -25,7 +25,7 @@ object Extendo {
     private var targetPower = 0.0
     private var currentPower = 0.0
 
-    private val pidController = PidController(0.0, 0.0, 0.0) // TODO: tune
+    private val pidController = PidController(0.005, 0.0, 0.001) // TODO: tune
 
     fun init(hardwareMap: HardwareMap) {
         extendoMotor = hardwareMap.get(DcMotorImplEx::class.java, "motorExtendo")

@@ -34,7 +34,7 @@ class ExtendoTesting : LinearOpMode() {
 
             log.add("Extendo Ticks", Extendo.extendoMotor.currentPosition)
             log.add("Extendo Target", Extendo.extendoMotor.targetPosition)
-            log.add("Extendo Power", Extendo.getPower())
+            log.add("Extendo Power", Extendo.   getPower())
 
             log.add("Extendo Current Draw",  Extendo.extendoMotor.getCurrent(CurrentUnit.AMPS))
             /*

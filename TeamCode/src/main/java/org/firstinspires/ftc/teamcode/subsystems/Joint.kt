@@ -6,9 +6,9 @@ import com.qualcomm.robotcore.hardware.ServoImplEx
 
 object Joint {
     //TODO tune
-    val PARALLEL_POSITION = 0.0
-    val COLLECT_POSITION = 0.0
-    val TRANSITION_POSITION = 0.0
+    val PARALLEL_POSITION = 0.5
+    val COLLECT_POSITION = 0.79
+    val TRANSITION_POSITION = 0.5
 
     lateinit var servoJoint: ServoImplEx
 

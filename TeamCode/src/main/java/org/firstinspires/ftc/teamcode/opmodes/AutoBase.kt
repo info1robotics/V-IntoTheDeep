@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes
 
+import com.pedropathing.follower.Follower
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
 import org.firstinspires.ftc.teamcode.common.ActionQueue
@@ -16,6 +17,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation
 import org.openftc.easyopencv.OpenCvPipeline
 
 abstract class AutoBase : LinearOpMode() {
+    lateinit var follower: Follower
     lateinit var log: Log
     var startPos: AutoStartPos = AutoStartPos.UNKNOWN
     lateinit var camera: OpenCvCamera

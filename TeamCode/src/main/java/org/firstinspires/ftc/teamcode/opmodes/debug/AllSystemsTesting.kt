@@ -27,7 +27,7 @@ class AllSystemsTesting: LinearOpMode() {
         var pivotPositionDeg = 0.0
 
         @JvmField
-        var clawPosition = Claw.OPEN_PARALLEL_POSITION
+        var clawPosition = Claw.OPEN_POSITION
 
         @JvmField
         var foldPosition = Fold.UNFOLDED
@@ -35,7 +35,7 @@ class AllSystemsTesting: LinearOpMode() {
         @JvmField
         var clutchPosition = 0.0
         @JvmField
-        var linkagePosition = Linkage.INIT
+        var linkagePosition = Linkage.INIT_POSITION
     }
 
 

@@ -30,14 +30,14 @@ object Lift {
     var targetPower = 0.0
     var currentPower = 0.0
 
-    private val pidControllerVertical = PidController(7.0,0.3,0.7)//TODO tune the params
+    private val pidControllerVertical = PidController(0.024,0.0005,0.005)//TODO tune the params
 
 
     fun init(hardwareMap: HardwareMap) {
         liftMotorLeft = hardwareMap.get(DcMotorImplEx::class.java, "motorLiftLeft")
         liftMotorRight = hardwareMap.get(DcMotorImplEx::class.java, "motorLiftRight")
 
-        liftMotorRight.direction = DcMotorSimple.Direction.REVERSE
+        liftMotorLeft.direction = DcMotorSimple.Direction.REVERSE
 
         liftMotors = arrayOf(liftMotorLeft, liftMotorRight)
 

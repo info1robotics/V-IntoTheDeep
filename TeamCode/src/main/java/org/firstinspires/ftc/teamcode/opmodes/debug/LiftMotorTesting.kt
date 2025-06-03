@@ -37,7 +37,7 @@ class LiftMotorTesting : LinearOpMode() {
             liftRight.motorType = this
         }
 
-        liftRight.direction = DcMotorSimple.Direction.REVERSE
+        liftLeft.direction = DcMotorSimple.Direction.REVERSE
 
         liftLeft.mode = DcMotor.RunMode.RUN_USING_ENCODER
         liftRight.mode = DcMotor.RunMode.RUN_USING_ENCODER

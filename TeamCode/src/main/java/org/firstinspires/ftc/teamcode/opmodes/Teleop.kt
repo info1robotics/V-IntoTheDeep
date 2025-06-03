@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.opmodes
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.GamepadEx
 import org.firstinspires.ftc.teamcode.common.Log
 import org.firstinspires.ftc.teamcode.subsystems.Lift
-
+@TeleOp
 class Teleop : LinearOpMode() {
     override fun runOpMode() {
         val gamepadEx1 = GamepadEx(gamepad1)

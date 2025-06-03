@@ -3,26 +3,31 @@ package org.firstinspires.ftc.teamcode.opmodes.debug
 import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit
 import org.firstinspires.ftc.teamcode.common.Log
-import org.firstinspires.ftc.teamcode.subsystems.Joint
+import org.firstinspires.ftc.teamcode.subsystems.Intake
 
 @TeleOp
 @Config
-class JointTesting : LinearOpMode() {
+class IntakeTesting : LinearOpMode() {
     companion object {
         @JvmField
-        var pos = Joint.PARALLEL_POSITION
+        var power = 0.0
     }
-    override fun runOpMode() {
-        Joint.init(hardwareMap)
-        val log = Log(telemetry)
-        waitForStart()
-        while (!isStopRequested && opModeIsActive()) {
-            Joint.setPosition(pos)
-            log.add("Position", Joint.getPosition())
-            log.tick()
 
+
+    override fun runOpMode() {
+        Intake.init(hardwareMap)
+
+        val log = Log(telemetry)
+
+
+        waitForStart()
+
+
+        while (opModeIsActive() && !isStopRequested) {
+            Intake.setPower(power)
+            log.tick()
         }
     }
-
 }

@@ -8,7 +8,7 @@ object Intake {
     lateinit var intake:DcMotor
 
     fun init(hardwareMap: HardwareMap) {
-        intake = hardwareMap.get(DcMotor::class.java, "intake")
+        intake = hardwareMap.get(DcMotor::class.java, "motorIntake")
         val motorConfigurationType = intake.motorType.clone()
         motorConfigurationType.achieveableMaxRPMFraction = 1.0
         intake.motorType = motorConfigurationType
