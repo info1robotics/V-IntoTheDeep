@@ -10,16 +10,12 @@ import org.firstinspires.ftc.teamcode.subsystems.Controller
 import org.firstinspires.ftc.teamcode.subsystems.Fold
 import org.firstinspires.ftc.teamcode.subsystems.Joint
 import org.firstinspires.ftc.teamcode.subsystems.Linkage
-import org.firstinspires.ftc.teamcode.subsystems.Pitch
 import org.firstinspires.ftc.teamcode.subsystems.Pivot
 
 @Config
 @TeleOp
 class AllSystemsTesting: LinearOpMode() {
     companion object {
-        @JvmField
-        var pitchPosition = Pitch.COLLECT_POSITION
-
         @JvmField
         var jointPosition = 0.0
 
@@ -45,7 +41,6 @@ class AllSystemsTesting: LinearOpMode() {
         waitForStart()
         while (opModeIsActive() && !isStopRequested) {
             Joint.setPosition(jointPosition)
-            Pitch.setPosition(pitchPosition)
             Pivot.setPositionDeg(pivotPositionDeg)
             Claw.setPosition(clawPosition)
             Fold.setPosition(foldPosition)

@@ -10,7 +10,6 @@ object Controller {
         Intake.init(hardwareMap)
         Clutch.init(hardwareMap)
         Claw.init(hardwareMap)
-        Pitch.init(hardwareMap)
         Pivot.init(hardwareMap)
         Joint.init(hardwareMap)
         Fold.init(hardwareMap)
