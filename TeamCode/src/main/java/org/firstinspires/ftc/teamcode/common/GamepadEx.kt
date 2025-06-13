@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.common
 
 import com.qualcomm.robotcore.hardware.Gamepad
+import org.firstinspires.ftc.teamcode.enums.Direction
+import org.firstinspires.ftc.teamcode.enums.Stick
+import kotlin.math.abs
 
 class GamepadEx(private val gamepad: Gamepad) {
     /*
@@ -28,9 +31,9 @@ class GamepadEx(private val gamepad: Gamepad) {
 	4	TRIGGER_LEFT
 	5	TRIGGER_RIGHT
 	*/
-    private var buttonState = BooleanArray(15)
-    private val buttonDown = BooleanArray(15)
-    private val buttonUp = BooleanArray(15)
+    private var buttonState = BooleanArray(16)
+    private val buttonDown = BooleanArray(16)
+    private val buttonUp = BooleanArray(16)
 
     private val analog = FloatArray(6)
 
@@ -46,7 +49,7 @@ class GamepadEx(private val gamepad: Gamepad) {
         analog[4] = gamepad.left_trigger
         analog[5] = gamepad.right_trigger
 
-        val newButtonState = BooleanArray(15)
+        val newButtonState = BooleanArray(16)
 
         newButtonState[0] = gamepad.start
         newButtonState[1] = gamepad.back
@@ -63,8 +66,9 @@ class GamepadEx(private val gamepad: Gamepad) {
         newButtonState[12] = gamepad.right_bumper
         newButtonState[13] = gamepad.left_stick_button
         newButtonState[14] = gamepad.right_stick_button
+        newButtonState[15] = gamepad.touchpad
 
-        for (i in 0..14) {
+        for (i in 0..15) {
             buttonDown[i] = newButtonState[i] && (newButtonState[i] != buttonState[i])
             buttonUp[i] = (!newButtonState[i]) && (newButtonState[i] != buttonState[i])
         }
@@ -118,6 +122,32 @@ class GamepadEx(private val gamepad: Gamepad) {
                 put("left_trigger", 4)
                 put("right_trigger", 5)
             }
+        }
+
+        fun Gamepad.corrected_left_stick_y(): Float = -this.left_stick_y
+        fun Gamepad.corrected_right_stick_y(): Float = -this.right_stick_y
+
+        fun Gamepad.getStickDirection(stick: Stick): Direction {
+            val gamepadSticks = if (stick == Stick.LEFT) this.left_stick_x.toDouble() to this.corrected_left_stick_y().toDouble()
+            else this.right_stick_x.toDouble() to this.corrected_right_stick_y().toDouble()
+
+            val maxDirection = listOf(
+                gamepadSticks.first,
+                gamepadSticks.second,
+                Math.abs(gamepadSticks.first),
+                Math.abs(gamepadSticks.second)
+            ).maxOrNull() ?: 0.0
+
+            if (maxDirection < 0.4) return Direction.NONE
+
+            val direction = when (maxDirection) {
+                gamepadSticks.first -> Direction.RIGHT
+                gamepadSticks.second -> Direction.UP
+                abs(gamepadSticks.first) -> Direction.LEFT
+                abs(gamepadSticks.second) -> Direction.DOWN
+                else -> Direction.NONE
+            }
+            return direction
         }
     }
 }

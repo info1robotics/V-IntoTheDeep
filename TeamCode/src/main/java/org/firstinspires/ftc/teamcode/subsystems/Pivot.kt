@@ -8,10 +8,10 @@ import com.qualcomm.robotcore.hardware.ServoImplEx
 object Pivot {
     //TODO: tune positions
     //double positions
-    val UPRIGHT_POSITION = 0.8
-    val DOWNRIGHT_POSITION = 0.0
+    val UPRIGHT_POSITION = 0.85
+    val DOWNRIGHT_POSITION = 0.067
     val PERPENDICULAR_POSITION = 0.4
-    val TRANSFER_POSITION = 0.93
+    val TRANSFER_POSITION = 0.98
 
     //degrees positions
     val STRAIGHT_POSITION = 0.0
@@ -54,5 +54,10 @@ object Pivot {
 
         return -positionDeg
     }
+    fun isPositive():Boolean//the pisition of the pivot in degrees is > 0
+    {
+        return Pivot.getPositionDeg() > 0
+    }
+
 
 }

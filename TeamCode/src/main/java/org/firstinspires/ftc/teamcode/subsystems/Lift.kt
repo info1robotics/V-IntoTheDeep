@@ -17,8 +17,11 @@ object Lift {
     val GEAR_RATIO = 1.0
     val MOTOR_PPR = 383.6
 
+    val HIGH_BASKET_POSITION = 680
+    val LOW_BASKET_POSITION = 290
+
     val LOWER_LIMIT = 0
-    val UPPER_LIMIT = 1200
+    val UPPER_LIMIT = 730
 
 
     lateinit var liftMotorLeft: DcMotorImplEx

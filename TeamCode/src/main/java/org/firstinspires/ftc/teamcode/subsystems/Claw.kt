@@ -11,9 +11,10 @@ import kotlin.math.abs
 
 object  Claw {
     //TODO: tune positions
-    val OPEN_POSITION = 0.285
-    val CLOSE_LIGHT_POSITION = 0.2
-    val CLOSE_STRONG_POSITION = 0.17
+    val MOST_OPEN_POSITION = 0.30
+    val OPEN_POSITION = 0.26//parallel position
+    val CLOSE_LIGHT_POSITION = 0.12
+    val CLOSE_STRONG_POSITION = 0.10
 
     lateinit var servoClaw: ServoImplEx
 
@@ -44,8 +45,15 @@ object  Claw {
     }
 
     fun toggle() {
-        if (open) closeLight()
-        else open()
+        if (open) {
+            closeLight()
+            open = false
+        }
+        else
+        {
+            open()
+            open = true
+        }
     }
 
     fun getPosition(): Double {

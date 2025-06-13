@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems
 
+import com.qualcomm.robotcore.hardware.ColorSensor
 import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.hardware.PwmControl.PwmRange
 import com.qualcomm.robotcore.hardware.ServoImplEx
@@ -7,8 +8,8 @@ import com.qualcomm.robotcore.hardware.ServoImplEx
 object Joint {
     //TODO tune
     val PARALLEL_POSITION = 0.5
-    val COLLECT_POSITION = 0.79
-    val TRANSITION_POSITION = 0.5
+    val COLLECT_POSITION = 0.675
+    val TRANSITION_POSITION = 0.44
 
     lateinit var servoJoint: ServoImplEx
 
@@ -24,4 +25,5 @@ object Joint {
     fun getPosition(): Double {
         return servoJoint.position
     }
+
 }

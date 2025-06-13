@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Pivot
 class PivotTestingServoUnits: LinearOpMode() {
     companion object {
         @JvmField
-        var POSITION = 0.0
+        var POSITION = 0.4
     }
 
     override fun runOpMode() {
@@ -21,7 +21,9 @@ class PivotTestingServoUnits: LinearOpMode() {
         while (opModeIsActive() && !isStopRequested) {
             Pivot.setPosition(POSITION)
             log.tick()
-            log.add("Servo Units")
+            log.add("Servo Units values")
+
+            log.add("In degrees:")
             log.add(Pivot.getPositionDeg().toString())
         }
     }

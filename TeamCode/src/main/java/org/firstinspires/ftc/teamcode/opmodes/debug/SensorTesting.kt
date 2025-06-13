@@ -9,22 +9,21 @@ import org.firstinspires.ftc.teamcode.subsystems.Joint
 
 @TeleOp
 @Config
-class JointTesting : LinearOpMode() {
-    companion object {
-        @JvmField
-        var pos = Joint.PARALLEL_POSITION
-    }
+class SensorTesting : LinearOpMode() {
     override fun runOpMode() {
-        Joint.init(hardwareMap)
+        Intake.init(hardwareMap)
         val log = Log(telemetry)
+
         waitForStart()
-        while (!isStopRequested && opModeIsActive()) {
 
-            Joint.setPosition(pos)
+        while (opModeIsActive() && !isStopRequested) {
 
+            val (r, g, b) = Intake.getColorReading()
+
+            log.add("Red", r)
+            log.add("Green", g)
+            log.add("Blue", b)
             log.tick()
-
         }
     }
-
 }

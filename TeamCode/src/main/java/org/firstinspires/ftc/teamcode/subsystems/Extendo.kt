@@ -16,8 +16,10 @@ object Extendo {
     private const val GEAR_RATIO = 1.0
     private const val MOTOR_PPR = 383.6
 
-    private const val LOWER_LIMIT = 0
-    private const val UPPER_LIMIT = 1000
+    const val LOWER_LIMIT = 0
+    const val UPPER_LIMIT = 1000
+    const val TRANSFER_POSITION = 300
+    const val ZERO_POSITION = 0
 
     lateinit var extendoMotor: DcMotorImplEx
 

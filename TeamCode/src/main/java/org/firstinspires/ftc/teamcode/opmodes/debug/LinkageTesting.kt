@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Linkage
 class LinkageTesting : LinearOpMode() {
     companion object {
         @JvmField
-        var pos = Linkage.INIT_POSITION
+        var pos = Linkage.ZERO_POSITION
     }
     override fun runOpMode() {
         Linkage.init(hardwareMap)

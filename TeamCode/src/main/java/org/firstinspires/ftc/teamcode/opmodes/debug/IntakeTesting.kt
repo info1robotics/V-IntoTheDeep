@@ -26,7 +26,12 @@ class IntakeTesting : LinearOpMode() {
 
 
         while (opModeIsActive() && !isStopRequested) {
-            Intake.setPower(power)
+
+            if(gamepad1.left_stick_y.toDouble() !=0.0)
+                Intake.setPower(gamepad1.left_stick_y.toDouble())
+            else
+                Intake.setPower(power)
+
             log.tick()
         }
     }

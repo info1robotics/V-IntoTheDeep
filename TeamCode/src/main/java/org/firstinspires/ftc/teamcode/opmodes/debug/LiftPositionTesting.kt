@@ -9,35 +9,22 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift
 
 @TeleOp
 @Config
-class LiftEncoderTesting : LinearOpMode() {
-    companion object {
-        @JvmField
-        var position = 0
-    }
-
+class LiftPositionTesting : LinearOpMode() {
 
     override fun runOpMode() {
         Lift.init(hardwareMap)
-
         Lift.resetEncoders()
-        Lift.forcePower(1.0)
+        Lift.forcePower(0.0)
+        Lift.typeBrake()
         val log = Log(telemetry)
 
 
         waitForStart()
 
-        var previousPosition = position
 
         while (opModeIsActive() && !isStopRequested) {
 
-            Lift.setTargetPosition(position)
-
-            if(Lift.getTargetPosition()<Lift.getCurrentPosition())
-                Lift.setPower(0.6)
-            else
-                Lift.setPower(1.0)
-
-            log.add("Lift Left caca", Lift.liftMotorLeft.currentPosition)
+            log.add("Lift Left", Lift.liftMotorLeft.currentPosition)
             log.add("Lift Right Ticks", Lift.liftMotorRight.currentPosition)
             log.add("Lift Left Target", Lift.liftMotorLeft.targetPosition)
             log.add("Lift Right Target", Lift.liftMotorRight.targetPosition)
@@ -54,7 +41,6 @@ class LiftEncoderTesting : LinearOpMode() {
             }
 
              */
-            previousPosition = position
             Lift.update()
             log.tick()
         }

@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
 import org.firstinspires.ftc.teamcode.common.ActionQueue
 import org.firstinspires.ftc.teamcode.common.AutoUtil.p
+import org.firstinspires.ftc.teamcode.common.GamepadEx
 import org.firstinspires.ftc.teamcode.common.Log
 import org.firstinspires.ftc.teamcode.enums.AutoStartPos
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive
@@ -17,6 +18,8 @@ import org.openftc.easyopencv.OpenCvCameraRotation
 import org.openftc.easyopencv.OpenCvPipeline
 
 abstract class AutoBase : LinearOpMode() {
+    lateinit var gamepadEx1: GamepadEx
+
     lateinit var follower: Follower
     lateinit var log: Log
     var startPos: AutoStartPos = AutoStartPos.UNKNOWN
@@ -30,10 +33,34 @@ abstract class AutoBase : LinearOpMode() {
 
     var full = true
 
+    var county = 0.0
+    var extendoGain = 0.0
+
     open fun onInit() {
+
+
     }
 
     fun onInitTick() {
+
+
+        if(gamepadEx1.getButtonDown("dpad_left"))
+            county++
+
+        else if(gamepadEx1.getButtonDown("dpad_right"))
+            county--
+
+        if(gamepadEx1.getButtonDown("dpad_up"))
+            extendoGain += 50
+
+        if(gamepadEx1.getButtonDown("dpad_down"))
+            extendoGain -= 50
+
+
+        gamepadEx1.update()
+        log.add("Gain for the y axis in inch: ",county.toString())
+        log.add("Gain for the extendo in ticks: ",extendoGain.toString())
+
     }
 
     @Throws(InterruptedException::class)
@@ -45,6 +72,7 @@ abstract class AutoBase : LinearOpMode() {
 
     @Throws(InterruptedException::class)
     override fun runOpMode() {
+        gamepadEx1 = GamepadEx(gamepad1)
         log = Log(this.telemetry)
 
         instance = this
@@ -84,42 +112,9 @@ abstract class AutoBase : LinearOpMode() {
             onStartTick()
 
             log.tick()
-            actionQueue.tick()
+            actionQueue.update()
         }
     }
-
-//    fun enableVision() {
-//        pipeline = LineDetectionPipeline();
-//
-//        val cameraMonitorViewId = hardwareMap.appContext.resources.getIdentifier(
-//            "cameraMonitorViewId",
-//            "id",
-//            hardwareMap.appContext.packageName
-//        )
-//        Log.instance.add("camera ", cameraMonitorViewId)
-//        camera = OpenCvCameraFactory.getInstance().createWebcam(
-//            hardwareMap.get(
-//                WebcamName::class.java, "Webcam 1"
-//            ), cameraMonitorViewId
-//        )
-//
-//        camera.setPipeline(pipeline);
-//        try {
-//            camera.openCameraDeviceAsync(object : AsyncCameraOpenListener {
-//                override fun onOpened() {
-//                    camera.startStreaming(1920, 1080, OpenCvCameraRotation.UPRIGHT)
-//                }
-//
-//                override fun onError(errorCode: Int) {
-//                    /*
-//                     * This will be called if the camera could not be opened
-//                     */
-//                }
-//            })
-//        } catch (_: Exception) {
-//
-//        }
-//    }
 
     enum class State {
         DEFAULT,

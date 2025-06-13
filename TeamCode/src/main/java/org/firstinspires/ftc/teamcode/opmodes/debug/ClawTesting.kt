@@ -11,7 +11,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Claw
 class ClawTesting : LinearOpMode() {
     companion object {
         @JvmField
-        var pos = 0.44
+        var pos = Claw.OPEN_POSITION
+
     }
     override fun runOpMode() {
         Claw.init(hardwareMap)

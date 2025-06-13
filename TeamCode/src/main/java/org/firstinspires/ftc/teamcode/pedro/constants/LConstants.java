@@ -9,8 +9,9 @@ public class LConstants {
     static {
         PinpointConstants.hardwareMapName = "pinpoint";
         //TODO: change these according to your robot
-        PinpointConstants.forwardY = 1;
-        PinpointConstants.strafeX = -2.5;
+
+        PinpointConstants.forwardY = 75.5;
+        PinpointConstants.strafeX = 87.15;
         PinpointConstants.distanceUnit = DistanceUnit.MM;
 
         PinpointConstants.encoderResolution = GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD;
