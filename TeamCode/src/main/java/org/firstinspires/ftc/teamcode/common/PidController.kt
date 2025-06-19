@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.common
 
-
 class PidController(val kP: Double, val kI: Double, val kD: Double) {
     private var lastError = 0.0
     private var integral = 0.0

@@ -24,7 +24,7 @@ object Controller {
         Claw.open()
         //Extendo.setTargetPosition(0)
         Joint.setPosition(Joint.PARALLEL_POSITION)
-        Fold.setPosition(Fold.UNFOLDED)
+        Fold.setPosition(Fold.FOLDED)
         Clutch.setPosition(0.0)
     }
     fun setTransfer()
@@ -34,7 +34,7 @@ object Controller {
         Pivot.setPosition(Pivot.TRANSFER_POSITION)
         Claw.open()
         //Extendo.setTargetPosition(Extendo.TRANSFER_POSITION)
-        Joint.setPosition(Joint.TRANSITION_POSITION)
+        Joint.setPosition(Joint.PARALLEL_POSITION)
         //Fold.setPosition(Fold.FOLDED)
         Clutch.setPosition(0.0)
     }

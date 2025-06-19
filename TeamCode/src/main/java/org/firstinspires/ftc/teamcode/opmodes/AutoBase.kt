@@ -18,6 +18,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation
 import org.openftc.easyopencv.OpenCvPipeline
 
 abstract class AutoBase : LinearOpMode() {
+
     lateinit var gamepadEx1: GamepadEx
 
     lateinit var follower: Follower

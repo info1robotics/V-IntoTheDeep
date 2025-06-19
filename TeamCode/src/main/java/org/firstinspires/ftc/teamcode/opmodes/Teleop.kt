@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.opmodes
 
+import com.qualcomm.hardware.lynx.LynxModule
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.Gamepad
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit
 import org.firstinspires.ftc.teamcode.common.ActionQueue
 import org.firstinspires.ftc.teamcode.common.GamepadEx
 import org.firstinspires.ftc.teamcode.common.Log
@@ -65,38 +67,47 @@ class Teleop : LinearOpMode() {
 
             }
         }
+
         else if(gamepadEx2.getButtonDown("y"))
         {
             lynx = true
             swing= false
-            Joint.setPosition(Joint.TRANSITION_POSITION)
+            Joint.setPosition(Joint.PARALLEL_POSITION)
             actionQueue.add(100)
             {
+                Intake.setPower(0.6)
                 Extendo.setTargetPosition(Extendo.TRANSFER_POSITION)
-                actionQueue.add(200)
+                actionQueue.add(400)
                 {
-                    Linkage.setPosition(Linkage.MAX_POSITION)
+                    Intake.setPower(0.0)
+                    Linkage.setPosition(Linkage.MAX_POSITION-0.09)
                     actionQueue.add(300)
                     {
                         Claw.closeLight()
                         actionQueue.add(200)
                         {
-                            Joint.setPosition(Joint.PARALLEL_POSITION+0.05)
-                            Linkage.setPosition(Linkage.ZERO_POSITION)
+                            Fold.unfold()
                             actionQueue.add(200)
                             {
-                                Controller.setLowBasket()
-                                actionQueue.add(350)
+
+                                Joint.setPosition(Joint.PARALLEL_POSITION+0.05)
+                                Linkage.setPosition(Linkage.ZERO_POSITION)
+                                actionQueue.add(200)
                                 {
-                                    Fold.unfold()
-                                    Linkage.setPosition(Linkage.MAX_POSITION)
+                                    Controller.setLowBasket()
+                                    actionQueue.add(350)
+                                    {
+                                        Fold.unfold()
+                                        Linkage.setPosition(Linkage.MAX_POSITION)
+                                        Fold.fold()
+                                        ready = true
+                                        lynx = false
 
-                                    ready = true
-                                    lynx = false
-
+                                    }
                                 }
                             }
                         }
+
                     }
                 }
 
@@ -108,7 +119,7 @@ class Teleop : LinearOpMode() {
     {
         if(gamepadEx2.getButtonDown("x"))
         {
-            Joint.setPosition(Joint.TRANSITION_POSITION)
+            Joint.setPosition(Joint.PARALLEL_POSITION)
         }
     }
 
@@ -122,7 +133,7 @@ class Teleop : LinearOpMode() {
             actionQueue.add(200)
             {
                 Controller.setTransfer()
-                ready=false
+                ready = false
             }
 
         }
@@ -133,13 +144,14 @@ class Teleop : LinearOpMode() {
     private fun handleInputExtendo()
     {
         var converter = 175
+        Extendo.setPower(1.0)
         if(!ready && !lynx)
             Extendo.setTargetPosition((Extendo.getCurrentPosition()+converter*gamepad2.corrected_left_stick_y()).toInt())
     }
 
     var swing = false
     private fun handleinputIntake() {
-
+        /*
         if(Intake.isYellow())
         {
             Fold.fold()
@@ -161,6 +173,8 @@ class Teleop : LinearOpMode() {
 
         }
 
+         */
+
         if (gamepad2.right_stick_y > 0.1) {
             Intake.take()
             if(!swing)
@@ -178,6 +192,13 @@ class Teleop : LinearOpMode() {
 
 
     override fun runOpMode() {
+
+        val allHubs = hardwareMap.getAll(
+            LynxModule::class.java
+        )
+
+        val controlHub = allHubs.first { it.isParent }
+        val expansionHub = allHubs.first { !it.isParent }
         gamepadEx1 = GamepadEx(gamepad1)
         gamepadEx2 = GamepadEx(gamepad2)
 
@@ -197,6 +218,8 @@ class Teleop : LinearOpMode() {
         var ignoreDpadDown = false
 
         while (opModeIsActive() && !isStopRequested) {
+            log.add("Expansion Hub Draw", expansionHub.getCurrent(CurrentUnit.AMPS))
+            log.add("Control Hub Draw", controlHub.getCurrent(CurrentUnit.AMPS))
 
             handleInputDrivetrain()
             handleInputLift()
@@ -215,7 +238,12 @@ class Teleop : LinearOpMode() {
             log.add("Green", g)
             log.add("Blue", b)
 
+            log.add("Lift Current Draw", Lift.liftMotorLeft.getCurrent(CurrentUnit.AMPS) + Lift.liftMotorRight.getCurrent(CurrentUnit.AMPS))
+
             log.tick()
+            log.add("lynx: ",lynx)
+            log.add("ready: ",ready)
+            log.add("swing: ",swing)
 
             Lift.update()
         }

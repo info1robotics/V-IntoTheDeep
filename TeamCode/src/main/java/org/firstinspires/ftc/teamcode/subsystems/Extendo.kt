@@ -17,8 +17,8 @@ object Extendo {
     private const val MOTOR_PPR = 383.6
 
     const val LOWER_LIMIT = 0
-    const val UPPER_LIMIT = 1000
-    const val TRANSFER_POSITION = 300
+    const val UPPER_LIMIT = 800
+    const val TRANSFER_POSITION = 200
     const val ZERO_POSITION = 0
 
     lateinit var extendoMotor: DcMotorImplEx
@@ -27,7 +27,7 @@ object Extendo {
     private var targetPower = 0.0
     private var currentPower = 0.0
 
-    private val pidController = PidController(0.005, 0.0, 0.001) // TODO: tune
+    //private val pidController = PidController(0.005, 0.0, 0.001) // TODO: tune
 
     fun init(hardwareMap: HardwareMap) {
         extendoMotor = hardwareMap.get(DcMotorImplEx::class.java, "motorExtendo")
@@ -68,8 +68,7 @@ object Extendo {
 
     fun setTargetPosition(target: Int) {
         val current = getCurrentPosition()
-        val power = pidController.calculate(target.toDouble(), current.toDouble()).coerceIn(-1.0, 1.0)
-        extendoMotor.power = power
+       // val power = pidController.calculate(target.toDouble(), current.toDouble()).coerceIn(-1.0, 1.0)
         extendoMotor.targetPosition = target
     }
 

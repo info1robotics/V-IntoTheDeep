@@ -21,6 +21,7 @@ class DualServoTesting: LinearOpMode() {
         val servo = hardwareMap.get(ServoImplEx::class.java, "servo")
         val servo2 = hardwareMap.get(ServoImplEx::class.java, "servo2")
         servo2.direction = Servo.Direction.REVERSE
+
         servo.pwmRange = PwmRange(500.0, 2500.0)
         servo2.pwmRange = PwmRange(500.0, 2500.0)
 

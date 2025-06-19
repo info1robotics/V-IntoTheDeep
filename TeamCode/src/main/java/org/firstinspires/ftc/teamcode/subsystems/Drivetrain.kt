@@ -32,10 +32,10 @@ object Drivetrain {
 
 
     fun init(hardwareMap: HardwareMap) {
-        fl = hardwareMap.get(DcMotor::class.java, "motorFL")
-        fr = hardwareMap.get(DcMotor::class.java, "motorFR")
-        bl = hardwareMap.get(DcMotor::class.java, "motorBL")
-        br = hardwareMap.get(DcMotor::class.java, "motorBR")
+        fl = hardwareMap.get(DcMotor::class.java, "leftFront")
+        fr = hardwareMap.get(DcMotor::class.java, "rightFront")
+        bl = hardwareMap.get(DcMotor::class.java, "leftRear")
+        br = hardwareMap.get(DcMotor::class.java, "rightRear")
 
         motors = arrayOf(fl, fr, bl, br)
 
@@ -57,10 +57,10 @@ object Drivetrain {
 
     fun initAuto(hardwareMap: HardwareMap) {
         LATERAL_MULTIPLIER = 1.1
-        fl = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "motorBR")
-        bl = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "motorFR")
-        br = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "motorFL")
-        fr = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "motorBL")
+        fl = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "rightRear")
+        bl = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "rightFront")
+        br = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "leftFront")
+        fr = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "leftRear")
 
         motors = arrayOf(fl, fr, bl, br)
 
