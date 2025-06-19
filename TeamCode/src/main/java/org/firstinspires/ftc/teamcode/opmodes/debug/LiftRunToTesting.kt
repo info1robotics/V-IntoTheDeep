@@ -33,9 +33,10 @@ class LiftRunToTesting : LinearOpMode() {
             Lift.setTargetPosition(position)
 
             if(Lift.getTargetPosition()<Lift.getCurrentPosition())
-                Lift.setPower(0.6)
+                Lift.setPower(0.37)
             else
                 Lift.setPower(1.0)
+
 
             log.add("Lift Left ", Lift.liftMotorLeft.currentPosition)
             log.add("Lift Right Ticks", Lift.liftMotorRight.currentPosition)

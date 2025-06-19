@@ -122,7 +122,7 @@ public class LocalizationTest extends OpMode {
         telemetryA.addData("heading", poseUpdater.getPose().getHeading());
         telemetryA.addData("total heading", poseUpdater.getTotalHeading());
         telemetryA.update();
-
+        telemetryA.addData("pose", poseUpdater.getPose());//TODO delete after debugging
         Drawing.drawPoseHistory(dashboardPoseTracker, "#4CAF50");
         Drawing.drawRobot(poseUpdater.getPose(), "#4CAF50");
         Drawing.sendPacket();

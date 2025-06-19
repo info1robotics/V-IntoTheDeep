@@ -50,7 +50,7 @@ object Controller {
     {
         Lift.setTargetPosition(Lift.HIGH_BASKET_POSITION)
         Pivot.setPositionDeg(35.0)
-        Linkage.setPosition(Linkage.MAX_POSITION)
+        //Linkage.setPosition(Linkage.MAX_POSITION)
 
     }
 

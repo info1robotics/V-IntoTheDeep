@@ -12,7 +12,7 @@ import kotlin.math.abs
 object  Claw {
     //TODO: tune positions
    // val MOST_OPEN_POSITION = 0.30
-    val OPEN_POSITION = 0.24//parallel position
+    val OPEN_POSITION = 0.255//parallel position
     val CLOSE_LIGHT_POSITION = 0.12
     val CLOSE_STRONG_POSITION = 0.11
 

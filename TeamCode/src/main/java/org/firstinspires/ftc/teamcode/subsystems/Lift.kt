@@ -33,7 +33,7 @@ object Lift {
     var targetPower = 0.0
     var currentPower = 0.0
 
-    private val pidControllerVertical = PidController(0.024,0.0005,0.005)//TODO tune the params
+    private val pidControllerVertical = PidController(  3.5,0.04,0.8)//TODO tune the params
 
 
     fun init(hardwareMap: HardwareMap) {
@@ -155,6 +155,7 @@ object Lift {
     fun update() {
         Log.instance.add("Current lift pos", Lift.getCurrentPosition())
         Log.instance.add("Target lift pos", Lift.getTargetPosition())
+        Log.instance.add("Lift Power",Lift.getPower())
         if (currentPower < targetPower) {
             currentPower += POWER_PER_TICK
             currentPower = currentPower.coerceIn(0.0, 1.0)

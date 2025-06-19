@@ -35,27 +35,27 @@ class Teleop : LinearOpMode() {
         val forwardPower = gamepad1.corrected_left_stick_y().toDouble()
         val strafePower =   gamepad1.left_stick_x.toDouble()
         val primaryRotationPower = gamepad1.right_trigger.toDouble() - gamepad1.left_trigger.toDouble()
-        val secondaryRotationPower = gamepad2.left_stick_x.toDouble()
-       // if(primaryRotationPower != 0.0)
-        Drivetrain.driveMecanum(forwardPower, strafePower, primaryRotationPower, 1.0)
-        //else
-            //Drivetrain.driveMecanum(forwardPower,strafePower,secondaryRotationPower,0.7)
+        val secondaryRotationPower = gamepad2.right_stick_x.toDouble()
+        if(primaryRotationPower != 0.0)
+            Drivetrain.driveMecanum(forwardPower, strafePower, primaryRotationPower, 1.0)
+        else
+            Drivetrain.driveMecanum(forwardPower,strafePower,secondaryRotationPower,0.7)
     }
 
     private fun handleInputLift()
     {
-        if(Lift.getTargetPosition()<Lift.getCurrentPosition())
-            Lift.setPower(0.5)
-        else
-            Lift.setPower(1.0)
+        if(Lift.getTargetPosition()==0 && Lift.getCurrentPosition()<5 && !lynx)
+            Lift.resetEncoders()
+
 
         if(gamepad2.left_stick_button)
             Lift.setTargetPosition(0)
 
-        if(gamepad2.corrected_left_stick_y() > 0.0 && ready)
+        if((gamepad2.corrected_left_stick_y() > 0.0 && ready && !lynx))
             Lift.setTargetPosition(Lift.HIGH_BASKET_POSITION)
 
     }
+
     var ready = false
     private fun handleTransfer()
     {
@@ -64,19 +64,18 @@ class Teleop : LinearOpMode() {
             Claw.toggle()
             actionQueue.add(150){
                 Controller.setTransfer()
-
             }
         }
 
         else if(gamepadEx2.getButtonDown("y"))
         {
             lynx = true
-            swing= false
+            swing = false
             Joint.setPosition(Joint.PARALLEL_POSITION)
             actionQueue.add(100)
             {
-                Intake.setPower(0.6)
-                Extendo.setTargetPosition(Extendo.TRANSFER_POSITION)
+                Intake.setPower(0.8)
+                Extendo.setTargetPositionSafe(Extendo.TRANSFER_POSITION)
                 actionQueue.add(400)
                 {
                     Intake.setPower(0.0)
@@ -89,7 +88,6 @@ class Teleop : LinearOpMode() {
                             Fold.unfold()
                             actionQueue.add(200)
                             {
-
                                 Joint.setPosition(Joint.PARALLEL_POSITION+0.05)
                                 Linkage.setPosition(Linkage.ZERO_POSITION)
                                 actionQueue.add(200)
@@ -146,7 +144,7 @@ class Teleop : LinearOpMode() {
         var converter = 175
         Extendo.setPower(1.0)
         if(!ready && !lynx)
-            Extendo.setTargetPosition((Extendo.getCurrentPosition()+converter*gamepad2.corrected_left_stick_y()).toInt())
+            Extendo.setTargetPositionSafe((Extendo.getCurrentPosition()+converter*gamepad2.corrected_left_stick_y()).toInt())
     }
 
     var swing = false

@@ -12,6 +12,8 @@ import static com.pedropathing.follower.FollowerConstants.rightRearMotorDirectio
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.pedropathing.util.Constants;
+import com.pedropathing.util.DashboardPoseTracker;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -19,9 +21,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.pedro.constants.FConstants;
-import org.firstinspires.ftc.teamcode.pedro.constants.LConstants;
-
 import com.pedropathing.localization.PoseUpdater;
 import com.pedropathing.pathgen.MathFunctions;
 import com.pedropathing.pathgen.Vector;
@@ -30,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.firstinspires.ftc.teamcode.pedro.constants.FConstants;
+import org.firstinspires.ftc.teamcode.pedro.constants.LConstants;
 
 /**
  * This is the ForwardVelocityTuner autonomous follower OpMode. This runs the robot forwards at max
@@ -72,7 +73,8 @@ public class ForwardVelocityTuner extends OpMode {
      */
     @Override
     public void init() {
-        poseUpdater = new PoseUpdater(hardwareMap, FConstants.class, LConstants.class);
+        Constants.setConstants(FConstants.class, LConstants.class);
+        poseUpdater = new PoseUpdater(hardwareMap);
 
         leftFront = hardwareMap.get(DcMotorEx.class, leftFrontMotorName);
         leftRear = hardwareMap.get(DcMotorEx.class, leftRearMotorName);
@@ -129,6 +131,7 @@ public class ForwardVelocityTuner extends OpMode {
      */
     @Override
     public void loop() {
+        poseUpdater.update();
         if (gamepad1.cross || gamepad1.a) {
             for (DcMotorEx motor : motors) {
                 motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -137,7 +140,6 @@ public class ForwardVelocityTuner extends OpMode {
             requestOpModeStop();
         }
 
-        poseUpdater.update();
         if (!end) {
             if (Math.abs(poseUpdater.getPose().getX()) > DISTANCE) {
                 end = true;
