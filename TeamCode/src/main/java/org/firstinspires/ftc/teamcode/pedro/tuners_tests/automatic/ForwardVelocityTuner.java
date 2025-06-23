@@ -74,7 +74,7 @@ public class ForwardVelocityTuner extends OpMode {
     @Override
     public void init() {
         Constants.setConstants(FConstants.class, LConstants.class);
-        poseUpdater = new PoseUpdater(hardwareMap);
+        poseUpdater = new PoseUpdater(hardwareMap, FConstants.class, LConstants.class);
 
         leftFront = hardwareMap.get(DcMotorEx.class, leftFrontMotorName);
         leftRear = hardwareMap.get(DcMotorEx.class, leftRearMotorName);
@@ -106,7 +106,7 @@ public class ForwardVelocityTuner extends OpMode {
         telemetryA.addLine("Make sure you have enough room, since the robot has inertia after cutting power.");
         telemetryA.addLine("After running the distance, the robot will cut power from the drivetrain and display the forward velocity.");
         telemetryA.addLine("Press CROSS or A on game pad 1 to stop.");
-        telemetryA.addData("pose", poseUpdater.getPose());
+        //telemetryA.addData("pose", poseUpdater.getPose());
         telemetryA.update();
 
     }
@@ -131,7 +131,6 @@ public class ForwardVelocityTuner extends OpMode {
      */
     @Override
     public void loop() {
-        poseUpdater.update();
         if (gamepad1.cross || gamepad1.a) {
             for (DcMotorEx motor : motors) {
                 motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -139,7 +138,8 @@ public class ForwardVelocityTuner extends OpMode {
             }
             requestOpModeStop();
         }
-
+        poseUpdater.update();
+        telemetryA.addData("pose", poseUpdater.getPose());
         if (!end) {
             if (Math.abs(poseUpdater.getPose().getX()) > DISTANCE) {
                 end = true;
@@ -165,7 +165,6 @@ public class ForwardVelocityTuner extends OpMode {
                 average += velocity;
             }
             average /= (double) velocities.size();
-
             telemetryA.addData("forward velocity:", average);
             telemetryA.update();
         }

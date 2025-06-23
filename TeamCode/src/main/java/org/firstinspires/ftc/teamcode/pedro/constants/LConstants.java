@@ -10,7 +10,7 @@ public class LConstants {
         PinpointConstants.hardwareMapName = "pinpoint";
         //TODO: change these according to your robot
 
-        PinpointConstants.forwardY = 75.5;
+        PinpointConstants.forwardY = -75.5;
         PinpointConstants.strafeX = 87.15;
         PinpointConstants.distanceUnit = DistanceUnit.MM;
 
