@@ -21,7 +21,7 @@ object Controller {
         Lift.setTargetPosition(0)
         Linkage.setPosition(Linkage.ZERO_POSITION)
         Pivot.setPosition(Pivot.TRANSFER_POSITION)
-        Claw.open()
+        Claw.closeStrong()
         //Extendo.setTargetPosition(0)
         Joint.setPosition(Joint.PARALLEL_POSITION)
         Fold.setPosition(Fold.FOLDED)
@@ -53,5 +53,17 @@ object Controller {
         //Linkage.setPosition(Linkage.MAX_POSITION)
 
     }
+    fun setHuman()
+    {
+        Pivot.setPosition(0.02)
+        Linkage.setPosition(Linkage.MAX_POSITION)
+        //Lift.setTargetPosition(0)
+        Claw.open()
+    }
+    fun setFetch()
+    {
+
+    }
+
 
 }

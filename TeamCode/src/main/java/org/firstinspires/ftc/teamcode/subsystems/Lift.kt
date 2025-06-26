@@ -9,19 +9,18 @@ import org.firstinspires.ftc.teamcode.common.PidController
 import kotlin.math.abs
 
 object Lift {
-    val SPOOL_DIAMETER_MM = 32
+    val SPOOL_DIAMETER_MM = 32.0
     val SPOOL_CIRCUMFERENCE_MM = SPOOL_DIAMETER_MM * Math.PI
 
-    //TODO: Change these according to your setup
     val MOTOR_RPM = 1600
     val GEAR_RATIO = 1.0
     val MOTOR_PPR = 383.6
 
-    val HIGH_BASKET_POSITION = 680
+    val HIGH_BASKET_POSITION = 600
     val LOW_BASKET_POSITION = 290
 
     val LOWER_LIMIT = 0
-    val UPPER_LIMIT = 730
+    val UPPER_LIMIT = 680
 
 
     lateinit var liftMotorLeft: DcMotorImplEx
@@ -29,12 +28,15 @@ object Lift {
 
     lateinit var liftMotors: Array<DcMotor>
 
-    var POWER_PER_TICK = 0.07
-    var targetPower = 0.0
+    private var targetPosition = 0
+
+    private val pidControllerVertical = PidController(
+        0.006,
+        0.00001,
+        0.005
+    )
     var currentPower = 0.0
-
-    private val pidControllerVertical = PidController(  3.5,0.04,0.8)//TODO tune the params
-
+    var targetPower = 0.0
 
     fun init(hardwareMap: HardwareMap) {
         liftMotorLeft = hardwareMap.get(DcMotorImplEx::class.java, "motorLiftLeft")
@@ -46,11 +48,11 @@ object Lift {
 
         liftMotors.forEach { motor ->
             motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-            motor.targetPosition = 0
-            motor.mode = DcMotor.RunMode.RUN_TO_POSITION
+            motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+            motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
 
             motor.motorType.clone().apply {
-                achieveableMaxRPMFraction = 1.0
+                achieveableMaxRPMFraction = 0.4
                 motor.motorType = this
             }
         }
@@ -59,69 +61,37 @@ object Lift {
     fun resetEncoders() {
         liftMotors.forEach {
             it.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-            it.targetPosition = 0
-            it.mode = DcMotor.RunMode.RUN_TO_POSITION
-        }
-    }
-
-    fun withoutEncoders()
-    {
-        liftMotors.forEach{
             it.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
         }
     }
 
     fun setPower(power: Double) {
-        liftMotorLeft.power=power
-        liftMotorRight.power = Lift.liftMotorLeft.power
-    }
-
-    fun forcePower(power: Double) {
-        currentPower = power
-        targetPower = -1.0
-    }
-
-    fun initTargetPower(power: Double) {
-        currentPower = 0.0
-        targetPower = power
-    }
-
-    fun setTargetPosition(target: Int) {
-
-        val current = getCurrentPosition()
-
-        val power = pidControllerVertical.calculate(target.toDouble(), current.toDouble()).coerceIn(-1.0, 1.0)
         liftMotorLeft.power = power
         liftMotorRight.power = power
-
-
-
-        liftMotors.forEach {
-            it.targetPosition = target
-        }
     }
 
-    fun setTargetPositionSafe(position: Int) {
-
-        val coercedPosition: Int = position.coerceIn(LOWER_LIMIT, UPPER_LIMIT)
-
-        setTargetPosition(coercedPosition)
+    fun setTargetPosition(position: Int) {
+        targetPosition = position.coerceIn(LOWER_LIMIT, UPPER_LIMIT)
     }
 
-
+    fun getTargetPosition(): Int {
+        return targetPosition
+    }
 
     fun getCurrentPosition(): Int {
         return (liftMotorLeft.currentPosition + liftMotorRight.currentPosition) / 2
     }
 
     fun reachedPosition(tolerance: Int = 10): Boolean {
-        return abs(getCurrentPosition() - getTargetPosition()) < (liftMotorRight.targetPositionTolerance + tolerance)
+        return abs(getCurrentPosition() - targetPosition) < tolerance
     }
 
-    fun setMode(runMode: DcMotor.RunMode) {
-        liftMotors.forEach {
-            it.mode = runMode
-        }
+    fun lower() {
+        setTargetPosition(LOWER_LIMIT)
+    }
+
+    fun raise() {
+        setTargetPosition(UPPER_LIMIT)
     }
 
     fun ticksToMM(ticks: Int): Double {
@@ -137,47 +107,54 @@ object Lift {
     }
 
     fun isAbleToGoDown(): Boolean {
-        return LOWER_LIMIT < getCurrentPosition()
+        return getCurrentPosition() > LOWER_LIMIT
     }
 
-    fun lower() {
-        setTargetPosition(0)
+    fun setMode(runMode: DcMotor.RunMode) {
+        liftMotors.forEach {
+            it.mode = runMode
+        }
     }
 
-    fun raise() {
-        setTargetPosition(UPPER_LIMIT)
+    fun typeFloat() {
+        liftMotors.forEach {
+            it.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
+        }
+    }
+
+    fun typeBrake() {
+        liftMotors.forEach {
+            it.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        }
     }
 
     fun getPower(): Double {
         return liftMotorLeft.power
     }
 
+    fun forcePower(power: Double) {
+        currentPower = power
+        targetPower = -1.0
+    }
+
     fun update() {
-        Log.instance.add("Current lift pos", Lift.getCurrentPosition())
-        Log.instance.add("Target lift pos", Lift.getTargetPosition())
-        Log.instance.add("Lift Power",Lift.getPower())
-        if (currentPower < targetPower) {
-            currentPower += POWER_PER_TICK
-            currentPower = currentPower.coerceIn(0.0, 1.0)
-        }
-        setPower(currentPower)
-    }
+        val current = getCurrentPosition()
+        val target = getTargetPosition()
 
-    fun getTargetPosition(): Int {
-        return liftMotorLeft.targetPosition
-    }
+        var power = pidControllerVertical.calculate(target.toDouble(), current.toDouble())
 
-    fun typeFloat()
-    {
-        liftMotors.forEach {
-            it.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
-        }
-    }
-    fun typeBrake()
-    {
-        liftMotors.forEach {
-            it.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-        }
-    }
+        // Optional gravity compensation
+        val gravityComp = if (target > current) 0.05 else 0.0
 
+        power += gravityComp
+
+        // Limit power to save current draw
+        power = power.coerceIn(-1.0, 1.0)
+
+        setPower(power)
+
+        Log.instance.add("Current lift pos", current)
+        Log.instance.add("Target lift pos", target)
+        Log.instance.add("Lift power", power)
+    }
 }

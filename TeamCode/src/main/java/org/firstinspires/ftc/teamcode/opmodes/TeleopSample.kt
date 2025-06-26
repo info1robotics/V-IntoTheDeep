@@ -18,10 +18,10 @@ import org.firstinspires.ftc.teamcode.subsystems.Joint
 import org.firstinspires.ftc.teamcode.subsystems.Lift
 import org.firstinspires.ftc.teamcode.subsystems.Linkage
 import org.firstinspires.ftc.teamcode.subsystems.Pivot
-import java.util.zip.ZipError
+import kotlin.math.abs
 
-@TeleOp(name = "Teleop")
-class Teleop : LinearOpMode() {
+@TeleOp(name = "Teleop Sample")
+class TeleopSample : LinearOpMode() {
 
     fun Gamepad.corrected_left_stick_y(): Float = -this.left_stick_y
 
@@ -44,15 +44,19 @@ class Teleop : LinearOpMode() {
 
     private fun handleInputLift()
     {
-        if(Lift.getTargetPosition()==0 && Lift.getCurrentPosition()<5 && !lynx)
+        if(Lift.getTargetPosition()==0 && Lift.getCurrentPosition()<10 && !lynx)
             Lift.resetEncoders()
 
+        else if(abs(Lift.getTargetPosition()-Lift.getCurrentPosition())<6)
+            Lift.setTargetPosition(Lift.getCurrentPosition())
 
         if(gamepad2.left_stick_button)
             Lift.setTargetPosition(0)
 
         if((gamepad2.corrected_left_stick_y() > 0.0 && ready && !lynx))
             Lift.setTargetPosition(Lift.HIGH_BASKET_POSITION)
+
+
 
     }
 
@@ -204,7 +208,7 @@ class Teleop : LinearOpMode() {
         Controller.init(hardwareMap)
 
         Lift.resetEncoders()
-        Lift.forcePower(1.0)
+        //Lift.forcePower(1.0)
 
         Extendo.resetEncoder()
         Extendo.forcePower(1.0)

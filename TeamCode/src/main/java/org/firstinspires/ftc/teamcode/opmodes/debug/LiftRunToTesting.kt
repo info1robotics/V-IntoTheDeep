@@ -33,7 +33,7 @@ class LiftRunToTesting : LinearOpMode() {
             Lift.setTargetPosition(position)
 
             if(Lift.getTargetPosition()<Lift.getCurrentPosition())
-                Lift.setPower(0.37)
+                Lift.setPower(0.8)
             else
                 Lift.setPower(1.0)
 

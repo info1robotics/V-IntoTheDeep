@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.tasks.TaskBuilder.sleepms
 @Autonomous
 
 class AutoBlank : AutoBase() {
-    /*
+
 
     fun turnTo(degrees: Double) { // if you want to turn right, use negative degrees
         val temp = Pose(follower.pose.x, follower.pose.y, Math.toRadians(degrees))
@@ -25,16 +25,16 @@ class AutoBlank : AutoBase() {
     fun goTo(x: Double, y: Double, degrees: Double) {
         val temp = Pose(x, y, Math.toRadians(degrees))
         follower.holdPoint(temp)
-    }x
+    }
 
     val testTraj = drive.actionBuilder(p(0.0, 0.0, 0.0))
         .build()
 
-     */
+
 
     override var task: Task = serial(
 
-        /*
+
         execute{
             goTo(10.0,20.0,rad(20.0))
 
@@ -43,6 +43,6 @@ class AutoBlank : AutoBase() {
         action(testTraj),
         sleepms(999999999)
 
-         */
+
     )
 }

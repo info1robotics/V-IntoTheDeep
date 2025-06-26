@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Joint
 class JointTesting : LinearOpMode() {
     companion object {
         @JvmField
-        var pos = Joint.PARALLEL_POSITION
+        var pos = Joint.COLLECT_POSITION
     }
     override fun runOpMode() {
         Joint.init(hardwareMap)

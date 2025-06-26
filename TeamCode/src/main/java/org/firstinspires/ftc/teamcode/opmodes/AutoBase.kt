@@ -1,23 +1,27 @@
 package org.firstinspires.ftc.teamcode.opmodes
 
+import androidx.annotation.CallSuper
 import com.pedropathing.follower.Follower
+import com.pedropathing.localization.Pose
+import com.pedropathing.util.Constants
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
 import org.firstinspires.ftc.teamcode.common.ActionQueue
-import org.firstinspires.ftc.teamcode.common.AutoUtil.p
 import org.firstinspires.ftc.teamcode.common.GamepadEx
 import org.firstinspires.ftc.teamcode.common.Log
 import org.firstinspires.ftc.teamcode.enums.AutoStartPos
+import org.firstinspires.ftc.teamcode.pedro.constants.FConstants
+import org.firstinspires.ftc.teamcode.pedro.constants.LConstants
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive
+import org.firstinspires.ftc.teamcode.subsystems.Claw
+import org.firstinspires.ftc.teamcode.subsystems.Controller
+import org.firstinspires.ftc.teamcode.subsystems.Drivetrain
+import org.firstinspires.ftc.teamcode.subsystems.Lift
 import org.firstinspires.ftc.teamcode.tasks.Task
 import org.firstinspires.ftc.teamcode.tasks.TaskBuilder.serial
 import org.openftc.easyopencv.OpenCvCamera
-import org.openftc.easyopencv.OpenCvCamera.AsyncCameraOpenListener
-import org.openftc.easyopencv.OpenCvCameraFactory
-import org.openftc.easyopencv.OpenCvCameraRotation
 import org.openftc.easyopencv.OpenCvPipeline
 
-abstract class AutoBase : LinearOpMode() {
+abstract class AutoBase(val startPose: Pose = Pose(0.0, 0.0, Math.toRadians(0.0))) : LinearOpMode() {
 
     lateinit var gamepadEx1: GamepadEx
 
@@ -36,86 +40,97 @@ abstract class AutoBase : LinearOpMode() {
 
     var county = 0.0
     var extendoGain = 0.0
-
+@CallSuper
     open fun onInit() {
 
+        Drivetrain.initAuto(hardwareMap)
 
-    }
-
-    fun onInitTick() {
-
-
-        if(gamepadEx1.getButtonDown("dpad_left"))
-            county++
-
-        else if(gamepadEx1.getButtonDown("dpad_right"))
-            county--
-
-        if(gamepadEx1.getButtonDown("dpad_up"))
-            extendoGain += 50
-
-        if(gamepadEx1.getButtonDown("dpad_down"))
-            extendoGain -= 50
-
-
-        gamepadEx1.update()
-        log.add("Gain for the y axis in inch: ",county.toString())
-        log.add("Gain for the extendo in ticks: ",extendoGain.toString())
-
-    }
-
-    @Throws(InterruptedException::class)
-    fun onStart() {
-    }
-
-    fun onStartTick() {
-    }
-
-    @Throws(InterruptedException::class)
-    override fun runOpMode() {
-        gamepadEx1 = GamepadEx(gamepad1)
+        Constants.setConstants(FConstants::class.java, LConstants::class.java)
+        follower = Follower(hardwareMap, FConstants::class.java, LConstants::class.java)
+        follower.pose = startPose
         log = Log(this.telemetry)
 
-        instance = this
+        Controller.init(hardwareMap)
+        Controller.setInit()
 
-        drive = MecanumDrive(this.hardwareMap, p(36.0, -60.0, Math.PI / 2))
+        Lift.resetEncoders()
 
+        Claw.closeStrong()
 
-        onInit()
+    }
 
+    @CallSuper
+    fun onInitTick() {
         state = State.INIT
-//        enableVision()
-        println("enabled vision")
 
         while (!isStarted && !isStopRequested) {
+            if (gamepadEx1.getButtonDown("dpad_left"))
+                county++
+            else if (gamepadEx1.getButtonDown("dpad_right"))
+                county--
 
-            onInitTick()
-            log.tick()
+            if (gamepadEx1.getButtonDown("dpad_up"))
+                extendoGain += 50
 
+            if (gamepadEx1.getButtonDown("dpad_down"))
+                extendoGain -= 50
+
+
+            gamepadEx1.update()
+            log.add("Gain for the y axis in inch: ", county.toString())
+            log.add("Gain for the extendo in ticks: ", extendoGain.toString())
         }
 
-        waitForStart()
+    }
+
+    @CallSuper
+    @Throws(InterruptedException::class)
+    fun onStart() {
         if (isStopRequested) return
 
         println("left init while loop")
         println(isStarted)
         println(isStopRequested)
         log.tick()
-
-//        camera.closeCameraDeviceAsync({});
-        onStart()
-
         state = State.START
-        task?.start(this)
+        task.start(this)
+    }
+
+    fun onStartTick() {
+        follower.update()
+        log.add("@X", follower.pose.x)
+        log.add("@Y", follower.pose.y)
+        log.add("@Heading", Math.toDegrees(follower.pose.heading))
+        task.tick()
+        log.tick()
+
+        actionQueue.update()
+    }
+    @Throws(InterruptedException::class)
+    override fun runOpMode() {
+
+        onInit()
+        instance=this
+
+        while (!isStarted && !isStopRequested) {
+            onInitTick()
+            log.tick()
+        }
+
+        waitForStart()
+        if (isStopRequested) return
+
+        onStart()
+        gamepadEx1 = GamepadEx(gamepad1)
+        state = State.START
 
         while (opModeIsActive() && !isStopRequested) {
-            task?.tick()
             onStartTick()
-
             log.tick()
             actionQueue.update()
         }
     }
+
 
     enum class State {
         DEFAULT,
