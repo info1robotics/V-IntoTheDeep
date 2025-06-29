@@ -20,7 +20,6 @@ class LiftRunToTesting : LinearOpMode() {
         Lift.init(hardwareMap)
 
         Lift.resetEncoders()
-        Lift.forcePower(1.0)
         val log = Log(telemetry)
 
 
@@ -31,11 +30,6 @@ class LiftRunToTesting : LinearOpMode() {
         while (opModeIsActive() && !isStopRequested) {
 
             Lift.setTargetPosition(position)
-
-            if(Lift.getTargetPosition()<Lift.getCurrentPosition())
-                Lift.setPower(0.8)
-            else
-                Lift.setPower(1.0)
 
 
             log.add("Lift Left ", Lift.liftMotorLeft.currentPosition)

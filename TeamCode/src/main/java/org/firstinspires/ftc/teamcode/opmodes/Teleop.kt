@@ -20,8 +20,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Linkage
 import org.firstinspires.ftc.teamcode.subsystems.Pivot
 import kotlin.math.abs
 
-@TeleOp(name = "Teleop Sample")
-class TeleopSample : LinearOpMode() {
+@TeleOp
+class Teleop : LinearOpMode() {
 
     fun Gamepad.corrected_left_stick_y(): Float = -this.left_stick_y
 

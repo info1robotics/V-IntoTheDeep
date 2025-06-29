@@ -14,6 +14,9 @@ class SensorTesting : LinearOpMode() {
         Intake.init(hardwareMap)
         val log = Log(telemetry)
 
+        var first = true
+        var detectedColor: String? = null
+
         waitForStart()
 
         while (opModeIsActive() && !isStopRequested) {
@@ -23,6 +26,20 @@ class SensorTesting : LinearOpMode() {
             log.add("Red", r)
             log.add("Green", g)
             log.add("Blue", b)
+            log.add("is Empty",Intake.isEmpty())
+            log.add("is Yellow", Intake.isYellow())
+            log.add("is Blue",Intake.isBlue())
+            log.add("is Red",Intake.isRed())
+
+            if (first) {
+                val (color, updatedFirst) = Intake.firstColour(first)
+                if (color != null) {
+                    detectedColor = color
+                    first = updatedFirst
+                }
+            }
+
+            log.add("First Detected Color", detectedColor ?: "none")
             log.tick()
         }
     }

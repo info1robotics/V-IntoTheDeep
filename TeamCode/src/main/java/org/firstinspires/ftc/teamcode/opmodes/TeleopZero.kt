@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes
 
 import com.qualcomm.hardware.lynx.LynxModule
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.Gamepad
@@ -13,8 +14,9 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivetrain
 import org.firstinspires.ftc.teamcode.subsystems.Extendo
 import org.firstinspires.ftc.teamcode.subsystems.Intake
 import org.firstinspires.ftc.teamcode.subsystems.Lift
-@TeleOp (name = "Teleop Specimen")
-class TeleopSpecimen: LinearOpMode() {
+@Disabled
+@TeleOp
+class TeleopZero: LinearOpMode() {
     fun Gamepad.corrected_left_stick_y(): Float = -this.left_stick_y
 
     lateinit var gamepadEx1: GamepadEx

@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.tasks.TaskBuilder.serial
 import org.firstinspires.ftc.teamcode.tasks.TaskBuilder.sleepms
 
 @Autonomous
+class AutoChamber : AutoBase(Pose(61.0,14.0, Math.toRadians(180.0))) {
 
-class AutoBlank : AutoBase(Pose(0.0,0.0, Math.toRadians(0.0))) {
 
     fun turnTo(degrees: Double) { // if you want to turn right, use negative degrees
         val temp = Pose(follower.pose.x, follower.pose.y, Math.toRadians(degrees))
@@ -29,9 +29,53 @@ class AutoBlank : AutoBase(Pose(0.0,0.0, Math.toRadians(0.0))) {
     override fun onInit(){
         super.onInit()
         task = serial(
+
             execute{
-                goTo(10.0,10.0,90.0)
+                goTo(35.0,41.0,270.0)//preload
+            },
+            sleepms(700),
+            execute{
+                goTo(9.0,39.0,270.0)
+            },
+            sleepms(1500),
+            execute {
+                goTo(9.0,34.5,180.0)
+            },
+            sleepms(900),//to human
+            execute{
+                goTo(60.0,34.5,180.0)
+            },
+
+
+            sleepms(1400),
+            execute{
+                goTo(9.0,40.0,270.0)//first sample
+            },
+            sleepms(1500),
+            execute {
+                goTo(9.0,34.5,180.0)
+            },
+            sleepms(900),
+            execute{
+                goTo(60.0,34.5,180.0)//to human
+            },
+
+            sleepms(1400),
+            execute{
+                goTo(9.0,40.0,270.0)//second sample
+            },
+            sleepms(1500),
+            execute {
+                goTo(9.0,34.5,180.0)
+            },
+            sleepms(900),
+            execute{
+                goTo(60.0,34.5,180.0)//to human
             }
+            //TODO finish the sequences and add the actions
+
+
+
         )
     }
 }

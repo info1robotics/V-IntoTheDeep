@@ -31,18 +31,19 @@ abstract class AutoBase(val startPose: Pose = Pose(0.0, 0.0, Math.toRadians(0.0)
     lateinit var camera: OpenCvCamera
     lateinit var pipeline: OpenCvPipeline
 
-    lateinit var drive: MecanumDrive
+    //lateinit var drive: MecanumDrive
     open var task: Task = serial()
 
     var actionQueue = ActionQueue()
 
     var full = true
 
-    var county = 0.0
-    var extendoGain = 0.0
+    //y is the axis
+    var yGainFirst = 0.0// gain for the first submersible cycle
+    var yGainSecond = 0.0//gain for the second submersible cycle
 @CallSuper
     open fun onInit() {
-
+        gamepadEx1 = GamepadEx(gamepad1)
         Drivetrain.initAuto(hardwareMap)
 
         Constants.setConstants(FConstants::class.java, LConstants::class.java)
@@ -64,21 +65,22 @@ abstract class AutoBase(val startPose: Pose = Pose(0.0, 0.0, Math.toRadians(0.0)
         state = State.INIT
 
         while (!isStarted && !isStopRequested) {
-            if (gamepadEx1.getButtonDown("dpad_left"))
-                county++
-            else if (gamepadEx1.getButtonDown("dpad_right"))
-                county--
 
             if (gamepadEx1.getButtonDown("dpad_up"))
-                extendoGain += 50
+                yGainFirst++
+            else if (gamepadEx1.getButtonDown("dpad_down"))
+                yGainSecond--
 
-            if (gamepadEx1.getButtonDown("dpad_down"))
-                extendoGain -= 50
+            if (gamepadEx1.getButtonDown("y"))
+                yGainSecond++
+
+            if (gamepadEx1.getButtonDown("a"))
+                yGainSecond --
 
 
             gamepadEx1.update()
-            log.add("Gain for the y axis in inch: ", county.toString())
-            log.add("Gain for the extendo in ticks: ", extendoGain.toString())
+            log.add("first gain: ", yGainFirst.toString())
+            log.add("second gain", yGainSecond.toString())
         }
 
     }
@@ -121,7 +123,6 @@ abstract class AutoBase(val startPose: Pose = Pose(0.0, 0.0, Math.toRadians(0.0)
         if (isStopRequested) return
 
         onStart()
-        gamepadEx1 = GamepadEx(gamepad1)
         state = State.START
 
         while (opModeIsActive() && !isStopRequested) {

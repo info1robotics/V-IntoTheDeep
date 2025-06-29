@@ -40,14 +40,34 @@ object Intake {
         return Triple(sensorIntake.red(), sensorIntake.green(), sensorIntake.blue())
     }
 
+
     fun isYellow(): Boolean {
         val (r, g, b) = getColorReading()
-        return r in 145..1000 && g in 130..1000 && b in 0..150
+        return r in 120..320 && g in 170..400 && b in 80..120
+    }
+    fun isBlue():Boolean{
+        val (r, g, b) = getColorReading()
+        return r in 45..60 && g in 80..120 && b in 100..200
+    }
+    fun isRed():Boolean{
+        val (r, g, b) = getColorReading()
+        return r in 100..225 && g in 80..145 && b in 65..90
     }
 
     fun isEmpty():Boolean{
         val (r, g, b) = getColorReading()
-        return r in 20..80 && g in 50..150 && b in 40..130
+        return r in 40..50 && g in 70..80 && b in 60..70
+    }
+
+    fun firstColour(first: Boolean): Pair<String?, Boolean> {
+        if (!first) return Pair(null, false)
+
+        return when {
+            isRed() -> Pair("red", false)
+            isBlue() -> Pair("blue", false)
+            isYellow() -> Pair("yellow", false)
+            else -> Pair(null, true) // still looking for the first color
+        }
     }
 
 }
