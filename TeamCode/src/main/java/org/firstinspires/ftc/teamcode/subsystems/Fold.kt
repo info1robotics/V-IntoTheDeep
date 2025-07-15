@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.ServoImplEx
 
 object Fold {
     //TODO: tune
-    val FOLDED = 0.7
-    val UNFOLDED = 0.3
+    val FOLDED = 0.2
+    val UNFOLDED = 0.7
 
     lateinit var servoFold: ServoImplEx
 

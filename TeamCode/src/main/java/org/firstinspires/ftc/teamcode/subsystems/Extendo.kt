@@ -18,7 +18,7 @@ object Extendo {
 
     const val LOWER_LIMIT = 0
     const val UPPER_LIMIT = 800
-    const val TRANSFER_POSITION = 200
+    const val TRANSFER_POSITION = 180
     const val ZERO_POSITION = 0
 
     lateinit var extendoMotor: DcMotorImplEx

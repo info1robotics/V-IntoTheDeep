@@ -18,7 +18,7 @@ class MotorTesting: LinearOpMode() {
         var encoder = false
 
         @JvmField
-        var motor = "motor1"
+        var motor = "motor"
     }
 
     override fun runOpMode() {
@@ -32,7 +32,7 @@ class MotorTesting: LinearOpMode() {
         waitForStart()
         while (opModeIsActive() && !isStopRequested) {
 
-            motor.power = 1.0
+            motor.power = motorPower
 
 
             log.add("Position", motor.currentPosition)

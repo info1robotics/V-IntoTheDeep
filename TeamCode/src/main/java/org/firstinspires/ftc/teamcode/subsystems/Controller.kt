@@ -15,16 +15,32 @@ object Controller {
         Pivot.init(hardwareMap)
         Joint.init(hardwareMap)
         Fold.init(hardwareMap)
+        Sweeper.init(hardwareMap)
     }
     fun setInit()
     {
+        Sweeper.setPosition(Sweeper.VERTICAL_POSITION)
         Lift.setTargetPosition(0)
         Linkage.setPosition(Linkage.ZERO_POSITION)
         Pivot.setPosition(Pivot.TRANSFER_POSITION)
-        Claw.closeStrong()
+        Claw.open()
         //Extendo.setTargetPosition(0)
         Joint.setPosition(Joint.PARALLEL_POSITION)
-        Fold.setPosition(Fold.FOLDED)
+        Fold.setPosition(Fold.UNFOLDED)
+        Clutch.setPosition(0.0)
+        Extendo.setTargetPositionSafe(0)
+        Extendo.setPower(1.0)
+    }
+    fun setInitAuto()
+    {
+        Lift.setTargetPosition(0)
+        Sweeper.setPosition(Sweeper.VERTICAL_POSITION)
+        Linkage.setPosition(Linkage.ZERO_POSITION)
+        Pivot.setPositionDeg(0.0)
+        Claw.closeLight()
+        //Extendo.setTargetPosition(0)
+        Joint.setPosition(Joint.PARALLEL_POSITION)
+        Fold.setPosition(Fold.UNFOLDED)
         Clutch.setPosition(0.0)
     }
     fun setTransfer()
@@ -33,7 +49,7 @@ object Controller {
         Linkage.setPosition(Linkage.ZERO_POSITION)
         Pivot.setPosition(Pivot.TRANSFER_POSITION)
         Claw.open()
-        //Extendo.setTargetPosition(Extendo.TRANSFER_POSITION)
+        Extendo.setTargetPosition(Extendo.TRANSFER_POSITION)
         Joint.setPosition(Joint.PARALLEL_POSITION)
         //Fold.setPosition(Fold.FOLDED)
         Clutch.setPosition(0.0)
@@ -53,17 +69,30 @@ object Controller {
         //Linkage.setPosition(Linkage.MAX_POSITION)
 
     }
+    fun setHighChamber()
+    {
+        Lift.setTargetPosition(400)
+        Pivot.setPositionDeg(-82.0)
+    }
     fun setHuman()
     {
-        Pivot.setPosition(0.02)
-        Linkage.setPosition(Linkage.MAX_POSITION)
-        //Lift.setTargetPosition(0)
+        Lift.setTargetPosition(0)
+        Pivot.setPositionDeg(115.0)
+        Linkage.setPosition(Linkage.ZERO_POSITION)
         Claw.open()
     }
-    fun setFetch()
+    fun setVision()
     {
-
+        Lift.setTargetPosition(0)
+        Linkage.setPosition(Linkage.ZERO_POSITION)
+        Pivot.setPositionDeg(98.0)
+        Claw.open()
+        //Extendo.setTargetPosition(0)
+        Joint.setPosition(Joint.PARALLEL_POSITION)
+        Fold.setPosition(Fold.UNFOLDED)
+        Clutch.setPosition(0.0)
     }
+
 
 
 }

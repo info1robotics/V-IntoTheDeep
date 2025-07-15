@@ -18,17 +18,17 @@ class DualServoTesting: LinearOpMode() {
     }
 
     override fun runOpMode() {
-        val servo = hardwareMap.get(ServoImplEx::class.java, "servo")
+        val servo1 = hardwareMap.get(ServoImplEx::class.java, "servo1")
         val servo2 = hardwareMap.get(ServoImplEx::class.java, "servo2")
         servo2.direction = Servo.Direction.REVERSE
 
-        servo.pwmRange = PwmRange(500.0, 2500.0)
+        servo1.pwmRange = PwmRange(500.0, 2500.0)
         servo2.pwmRange = PwmRange(500.0, 2500.0)
 
         waitForStart()
         while (opModeIsActive() && !isStopRequested) {
             if (servoPosition == -1.0) continue; // skip starting position
-            servo.position = servoPosition
+            servo1.position = servoPosition
             servo2.position = servoPosition
         }
     }

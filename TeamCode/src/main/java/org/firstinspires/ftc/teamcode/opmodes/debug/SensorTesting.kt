@@ -30,6 +30,8 @@ class SensorTesting : LinearOpMode() {
             log.add("is Yellow", Intake.isYellow())
             log.add("is Blue",Intake.isBlue())
             log.add("is Red",Intake.isRed())
+            log.add("distance", Intake.getDistance())
+
 
             if (first) {
                 val (color, updatedFirst) = Intake.firstColour(first)

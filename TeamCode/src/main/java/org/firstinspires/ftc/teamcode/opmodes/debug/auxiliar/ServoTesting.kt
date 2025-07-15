@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.ServoImplEx
 class ServoTesting: LinearOpMode() {
     companion object {
         @JvmField
-        var servoPosition = -1.0
+        var servoPosition = 0.0
     }
 
     override fun runOpMode() {
@@ -22,7 +22,7 @@ class ServoTesting: LinearOpMode() {
 
         waitForStart()
         while (opModeIsActive() && !isStopRequested) {
-            if (servoPosition == -1.0) continue; // skip starting position
+            //if (servoPosition == -1.0) continue; // skip starting position
             servo.position = servoPosition
         }
     }

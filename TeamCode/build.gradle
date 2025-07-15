@@ -52,7 +52,6 @@ dependencies {
     implementation project(':FtcRobotController')
 //    implementation 'org.openftc:easyopencv:1.7.2'
    // implementation 'com.pedropathing:pedro:1.0.9'
-
     implementation "com.acmerobotics.dashboard:dashboard:0.4.25"
     implementation "dev.frozenmilk.sinister:Sloth:0.0.1"
     implementation "dev.frozenmilk.sinister.sloth:DashFix:0.0.0"

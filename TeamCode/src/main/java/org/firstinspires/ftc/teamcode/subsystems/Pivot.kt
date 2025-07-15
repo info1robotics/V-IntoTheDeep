@@ -8,10 +8,10 @@ import com.qualcomm.robotcore.hardware.ServoImplEx
 object Pivot {
     //TODO: tune positions
     //double positions
-    val UPRIGHT_POSITION = 0.85
-    val DOWNRIGHT_POSITION = 0.067
-    val PERPENDICULAR_POSITION = 0.4
-    val TRANSFER_POSITION = 0.98
+    val UPRIGHT_POSITION = 0.76
+    val DOWNRIGHT_POSITION = 0.15
+    val PERPENDICULAR_POSITION = 0.45
+    val TRANSFER_POSITION = 0.89
 
     //degrees positions
     val STRAIGHT_POSITION = 0.0

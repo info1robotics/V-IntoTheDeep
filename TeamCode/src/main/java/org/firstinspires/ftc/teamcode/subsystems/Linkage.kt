@@ -6,9 +6,9 @@ import com.qualcomm.robotcore.hardware.ServoImplEx
 
 object   Linkage {
     //TODO tune
-    val MAX_POSITION= 0.24//max position
-    val ZERO_POSITION = 0.0
-    val SCORE_BASKET = 0.14
+    val MAX_POSITION= 0.27//max position
+    val ZERO_POSITION = 0.00
+    val SCORE_BASKET = 0.2
     lateinit var servoLinkage: ServoImplEx
 
     fun init(hardwareMap: HardwareMap) {

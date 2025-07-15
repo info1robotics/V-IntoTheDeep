@@ -14,8 +14,9 @@ class LiftPositionTesting : LinearOpMode() {
     override fun runOpMode() {
         Lift.init(hardwareMap)
         Lift.resetEncoders()
-        Lift.forcePower(0.0)
-        Lift.typeBrake()
+        Lift.typeFloat()
+        Lift.setPower(0.0)
+
         val log = Log(telemetry)
 
 
@@ -23,6 +24,8 @@ class LiftPositionTesting : LinearOpMode() {
 
 
         while (opModeIsActive() && !isStopRequested) {
+            //Lift.setPower(0.0)
+
 
             log.add("Lift Left", Lift.liftMotorLeft.currentPosition)
             log.add("Lift Right Ticks", Lift.liftMotorRight.currentPosition)

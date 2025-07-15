@@ -41,4 +41,8 @@ object TaskBuilder {
     fun action(action: Action): ActionTask {
         return ActionTask(action)
     }
+
+    fun sleepuntil(condition: () -> Boolean): SleepUntilTask {
+        return SleepUntilTask(condition)
+    }
 }

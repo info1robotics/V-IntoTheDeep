@@ -15,7 +15,9 @@ import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive
 import org.firstinspires.ftc.teamcode.subsystems.Claw
 import org.firstinspires.ftc.teamcode.subsystems.Controller
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain
+import org.firstinspires.ftc.teamcode.subsystems.Extendo
 import org.firstinspires.ftc.teamcode.subsystems.Lift
+import org.firstinspires.ftc.teamcode.subsystems.extra.Limelight
 import org.firstinspires.ftc.teamcode.tasks.Task
 import org.firstinspires.ftc.teamcode.tasks.TaskBuilder.serial
 import org.openftc.easyopencv.OpenCvCamera
@@ -39,12 +41,13 @@ abstract class AutoBase(val startPose: Pose = Pose(0.0, 0.0, Math.toRadians(0.0)
     var full = true
 
     //y is the axis
-    var yGainFirst = 0.0// gain for the first submersible cycle
-    var yGainSecond = 0.0//gain for the second submersible cycle
+    var yGain = 0// gain for the first submersible cycle
+    var extendoGain = 0//gain for extendo
 @CallSuper
     open fun onInit() {
         gamepadEx1 = GamepadEx(gamepad1)
         Drivetrain.initAuto(hardwareMap)
+       // Limelight.init(hardwareMap)
 
         Constants.setConstants(FConstants::class.java, LConstants::class.java)
         follower = Follower(hardwareMap, FConstants::class.java, LConstants::class.java)
@@ -52,7 +55,9 @@ abstract class AutoBase(val startPose: Pose = Pose(0.0, 0.0, Math.toRadians(0.0)
         log = Log(this.telemetry)
 
         Controller.init(hardwareMap)
-        Controller.setInit()
+        Extendo.resetEncoder()
+        Extendo.setPower(1.0)
+        Controller.setInitAuto()
 
         Lift.resetEncoders()
 
@@ -66,21 +71,37 @@ abstract class AutoBase(val startPose: Pose = Pose(0.0, 0.0, Math.toRadians(0.0)
 
         while (!isStarted && !isStopRequested) {
 
-            if (gamepadEx1.getButtonDown("dpad_up"))
-                yGainFirst++
-            else if (gamepadEx1.getButtonDown("dpad_down"))
-                yGainSecond--
+            if (gamepad1.a) {
+                full = true
+            }
+            if (gamepad1.b) {
+                full = false
+            }
 
-            if (gamepadEx1.getButtonDown("y"))
-                yGainSecond++
+            if (full) {
+                log.add("Running Full")
 
-            if (gamepadEx1.getButtonDown("a"))
-                yGainSecond --
+            } else {
+                log.add("No detection")
+                yGain = 0
+                extendoGain = 0
+            }
+
+            when {
+                gamepadEx1.getButtonDown("dpad_up") && full -> yGain--
+                gamepadEx1.getButtonDown("dpad_down") && full -> yGain++
+            }
+
+            when {
+                gamepadEx1.getButtonDown("dpad_left") && full -> extendoGain+=10
+                gamepadEx1.getButtonDown("dpad_right") && full -> extendoGain-=10
+            }
 
 
             gamepadEx1.update()
-            log.add("first gain: ", yGainFirst.toString())
-            log.add("second gain", yGainSecond.toString())
+            log.add("y axis gain ", yGain.toString())
+            log.add("extendo gain", extendoGain.toString())
+            log.tick()
         }
 
     }
@@ -120,16 +141,22 @@ abstract class AutoBase(val startPose: Pose = Pose(0.0, 0.0, Math.toRadians(0.0)
         }
 
         waitForStart()
-        if (isStopRequested) return
 
+        if (isStopRequested) return
+       // Limelight.start()
         onStart()
         state = State.START
 
         while (opModeIsActive() && !isStopRequested) {
+
             onStartTick()
             log.tick()
             actionQueue.update()
+            Lift.update()
+            log.add(Extendo.getPower().toString())
+            log.tick()
         }
+        //Limelight.stop()
     }
 
 

@@ -1,3 +1,4 @@
+
 package org.firstinspires.ftc.teamcode.subsystems
 
 import com.qualcomm.robotcore.hardware.DcMotor
@@ -16,11 +17,11 @@ object Lift {
     val GEAR_RATIO = 1.0
     val MOTOR_PPR = 383.6
 
-    val HIGH_BASKET_POSITION = 600
+    val HIGH_BASKET_POSITION = 680
     val LOW_BASKET_POSITION = 290
 
     val LOWER_LIMIT = 0
-    val UPPER_LIMIT = 680
+    val UPPER_LIMIT = 800
 
 
     lateinit var liftMotorLeft: DcMotorImplEx
@@ -31,7 +32,7 @@ object Lift {
     private var targetPosition = 0
 
     private val pidControllerVertical = PidController(
-        0.006,
+        0.008,
         0.00001,
         0.005
     )
@@ -52,7 +53,7 @@ object Lift {
             motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
 
             motor.motorType.clone().apply {
-                achieveableMaxRPMFraction = 0.4
+                achieveableMaxRPMFraction = 1.0
                 motor.motorType = this
             }
         }

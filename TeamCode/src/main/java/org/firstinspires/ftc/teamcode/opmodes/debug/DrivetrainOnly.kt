@@ -18,7 +18,7 @@ class DrivetrainOnly : LinearOpMode() {
             val forwardPower = gamepad1.corrected_left_stick_y().toDouble()
             val strafePower =   gamepad1.left_stick_x.toDouble()
             val rotationPower = gamepad1.right_trigger.toDouble() - gamepad1.left_trigger.toDouble()
-            Drivetrain.driveMecanum(forwardPower, strafePower, rotationPower, 0.4)
+            Drivetrain.driveMecanum(forwardPower, strafePower, rotationPower, 1.0)
 
 
             log.tick()

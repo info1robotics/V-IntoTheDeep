@@ -19,10 +19,8 @@ public class MeepMeepTesting {
                 .build();
 
 
-        TrajectoryActionBuilder firstTraj = myBot.getDrive().actionBuilder(new Pose2d(61.0, 14, Math.toRadians(180)))
-                .strafeToConstantHeading(new Vector2d(-16.0, -52.0))
-                .strafeToConstantHeading(new Vector2d(-52.1, -33.4))
-                .strafeToLinearHeading(new Vector2d(-52.1, -48.4), Math.toRadians(-120));
+        TrajectoryActionBuilder firstTraj = myBot.getDrive().actionBuilder(new Pose2d(-38, -61, Math.toRadians(0)))
+                .strafeToLinearHeading(new Vector2d(-54, -59),Math.toRadians(30));
 
 
 //        TrajectoryActionBuilder secondTraj = firstTraj.endTrajectory()

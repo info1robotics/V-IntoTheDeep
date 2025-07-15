@@ -53,12 +53,14 @@ class HangTesting : LinearOpMode() {
 
             Drivetrain.fl.power = -power
             Drivetrain.bl.power = -power
+            Drivetrain.fr.power = -power
+            Drivetrain.br.power = -power
 
             liftLeft.power = power
             liftRight.power = power
 
-            liftLeft.targetPosition = -900
-            liftRight.targetPosition = -900
+            liftLeft.targetPosition = -700
+            liftRight.targetPosition = -700
 
             liftLeft.mode = DcMotor.RunMode.RUN_TO_POSITION
             liftRight.mode = DcMotor.RunMode.RUN_TO_POSITION
